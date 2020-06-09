@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tab.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pauljull <pauljull@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paul <paul@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/08 14:17:53 by pauljull          #+#    #+#             */
-/*   Updated: 2020/03/10 17:40:46 by pauljull         ###   ########.fr       */
+/*   Updated: 2020/05/26 21:30:42 by paul             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,9 @@
 
 # define TAB_H
 
-#include "./struct.h"
-#include "./prototypes.h"
+# include "./struct.h"
+# include "./prototypes.h"
 
-extern t_instruction	tab_instruction[16];
+extern t_instruction	g_tab_instruction[16];
 
 #endif

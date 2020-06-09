@@ -6,7 +6,7 @@
 /*   By: aboitier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 23:03:24 by aboitier          #+#    #+#             */
-/*   Updated: 2020/03/10 23:10:08 by aboitier         ###   ########.fr       */
+/*   Updated: 2020/03/12 16:30:29 by aboitier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,9 @@ int		init(t_asm *env, char *av)
 		return (FALSE);
 	if (scan(env) == FALSE)
 	{
-		ft_putstr(MALLOC_ERR);
-	}	
+		ft_putstr(MALLOC_ERR_MSG);
+	}
+	env->nb_newlines = 1;
+	env->nb_char = 1;
 	return (TRUE);
 }

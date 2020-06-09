@@ -3,39 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   ft_insertion_vm.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damboule <damboule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paul <paul@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 13:59:05 by damboule          #+#    #+#             */
-/*   Updated: 2020/03/12 17:11:36 by damboule         ###   ########.fr       */
+/*   Updated: 2020/05/26 20:34:58 by paul             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/struct.h"
 #include "../includes/op.h"
 #include "../includes/prototypes.h"
-#include "../../libft/includes/libft.h"
+#include "../../libft/includes/prototypes.h"
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <stdlib.h>
 
-int		ft_convert_to_int(unsigned char tab[4])
+void		ft_cpy_printablechar(char *dst, unsigned char *src, int max)
 {
-	int		result;
 	int		index;
-
-	result = 0;
-	index = 0;
-	while (index < 4)
-	{
-		result |= tab[index];
-		if (index < 3)
-			result <<= 8;
-		index++;
-	}
-	return (result);
-}
-
-void	ft_cpy_printablechar(char *dst, unsigned char *src, int max)
-{
-	int index;
-	int	a;
+	int		a;
 
 	a = 0;
 	index = 0;
@@ -52,55 +40,85 @@ void	ft_cpy_printablechar(char *dst, unsigned char *src, int max)
 	return ;
 }
 
-int		ft_players_data(int fd, char *player, int value_read)
+/*
+** fonction leaks sur ft_itoa
+*/
+
+int			ft_players_data(int fd, char *player, int value_read, int arg)
 {
-	unsigned char	name[value_read];
+	uint8_t	name[value_read];
+	char	*char_tmp;
 
 	if (read(fd, name, value_read) < value_read)
 		return (EXIT_FAILURE);
-	if (MAGIC == value_read && ft_convert_to_int(name) != COREWAR_EXEC_MAGIC)
+	if (arg == 1 && ft_convert_to_int(name) != COREWAR_EXEC_MAGIC)
 		return (EXIT_FAILURE);
-//	if (SIZE_EXEC == value_read) //&& name != )
+	char_tmp = ft_itoa(ft_convert_to_int(name));
+	if (arg == 2 && ft_strcpy(player, char_tmp))
+	{
+		free(char_tmp);
+		return (EXIT_SUCCESS);
+	}
+	free(char_tmp);
 	ft_cpy_printablechar(player, name, value_read);
 	return (EXIT_SUCCESS);
 }
 
-int		ft_read(const char *filecor,
+int			ft_read(const char *filecor,
 				unsigned char vm[MEM_SIZE], int write_pos, t_player *player)
 {
 	char	skip[NOT_READ + 1];
 	int		fd;
-	
+
 	if ((fd = open(filecor, O_RDONLY)) == -1)
-		return (ft_usage(3));
-	if (ft_players_data(fd, player->magic, MAGIC))
-		return (ft_usage(4));
-	if (ft_players_data(fd, player->name, READ_NAME))
-		return (ft_usage(4));
+		return (ft_usage(FILECOR));
+	if (ft_players_data(fd, player->magic, MAGIC, HEADER))
+		return (ft_usage(MC_HEADER));
+	if (ft_players_data(fd, player->name, READ_NAME, NO_ARGS))
+		return (ft_usage(SIZE_NAME));
 	read(fd, skip, NOT_READ);
-	if (ft_players_data(fd, player->size, SIZE_EXEC))
-		return (ft_usage(5));
-	if (ft_players_data(fd, player->comment, READ_COM))
-		return (ft_usage(5));
+	if (ft_players_data(fd, player->size, READ_EXEC, 2))
+		return (ft_usage(SIZE_EXEC));
+	if (ft_players_data(fd, player->comment, READ_COM, NO_ARGS))
+		return (ft_usage(SIZE_COMM));
 	read(fd, skip, NOT_READ);
 	if (read(fd, vm + write_pos, TO_READ + 1) > TO_READ)
-		return (ft_usage(6));
+		return (ft_usage(SIZE_EXEC));
 	return (EXIT_SUCCESS);
 }
 
-int		ft_insertion_vm(const t_args *filecor,
+int			ft_create_player(t_player *player, t_args *filecor, int value,
+					unsigned char vm[MEM_SIZE])
+{
+	int		i;
+	int		write_pos;
+
+	i = 0;
+	while (i < filecor->player_nb)
+	{
+		if (filecor->option[i] == value)
+		{
+			player->index_player = value;
+			write_pos = (MEM_SIZE / filecor->player_nb) * (value - 1);
+			if (ft_read(filecor->champ[i], vm, write_pos, player))
+				return (EXIT_FAILURE);
+			return (EXIT_SUCCESS);
+		}
+		i += 1;
+	}
+	return (EXIT_FAILURE);
+}
+
+int			ft_insertion_vm(t_args *filecor,
 						unsigned char vm[MEM_SIZE], t_player player[4])
 {
-	int		write_pos;
-	int		nb_champ;
+	int		i;
 
-	nb_champ = 0;
-	while (filecor->champ[nb_champ] != NULL)
+	i = 0;
+	while (i < filecor->player_nb)
 	{
-		write_pos = (MEM_SIZE / filecor->player_nb) * nb_champ;
-		if (ft_read(filecor->champ[nb_champ], vm, write_pos, &player[nb_champ]))
-			return (EXIT_FAILURE);
-		nb_champ++;
+		ft_create_player(&player[i], filecor, i + 1, vm);
+		i += 1;
 	}
 	return (EXIT_SUCCESS);
 }

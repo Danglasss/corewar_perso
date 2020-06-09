@@ -6,7 +6,7 @@
 /*   By: aboitier <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 15:01:18 by aboitier          #+#    #+#             */
-/*   Updated: 2020/03/10 23:03:17 by aboitier         ###   ########.fr       */
+/*   Updated: 2020/03/12 18:33:41 by aboitier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,8 @@ static int		check_first_lines(t_scan scan)
 	i = 0;
 	if (scan.buffer[0] == '\0')
 		return (FALSE);
-	while (scan.buffer[i] && ft_isspace(scan.buffer[i]) != 0)
+	while (scan.buffer[i] && (ft_isspace(scan.buffer[i]) != 0
+		|| jump_comment(&scan.buffer) == 1))
 		i++;
 	if (!scan.buffer || scan.buffer[i++] != '.')
 		return (FALSE);	
@@ -85,7 +86,7 @@ int			scan(t_asm *env)
 		if (scan.reload == 10)
 			if (check_first_lines(scan) == FALSE)
 			{	
-				printf(_RED"\nSCAN PROBLEM\n\n"_RESET);
+				printf(_RED"\nCHECK FIRST LINES PROBLEM\n\n"_RESET);
 				break ;
 			}
 	}

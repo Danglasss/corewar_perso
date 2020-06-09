@@ -3,45 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ft_error.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: damboule <damboule@student.42.fr>          +#+  +:+       +#+        */
+/*   By: paul <paul@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/07 17:08:59 by pauljull          #+#    #+#             */
-/*   Updated: 2020/03/12 14:18:29 by damboule         ###   ########.fr       */
+/*   Updated: 2020/05/26 21:07:47 by paul             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/struct.h"
 #include "../includes/op.h"
 #include "../includes/prototypes.h"
-#include "../../libft/includes/libft.h"
+#include "../../libft/includes/prototypes.h"
 
-char	tab[6][128] = 
+char	g_tab[7][128] =
 {
 	"No valid \".cor\" file found.\n",
-	"Option are invalid : \"--help\" for usage.\n",
-	"The file \".cor\" is not valid.\n",
-	"Probleme about the joueur name.\n",
-	"The size of the champion is to small.\n",
-	"The size of the champion is to big.\n"
+	"Option or file \".cor\" are invalid : \"--help\" for usage.\n",
+	"The file \".cor\" can't ba open.\n",
+	"Probleme with the magic header.\n",
+	"Probleme with size of the champion name.\n",
+	"Probleme with size of the executable code.\n",
+	"Probleme with size of the comment.\n"
+	"-n number is too low or to hight or is double.\n"
 };
 
 void	ft_print_error(int usage)
 {
-	ft_putstr(tab[usage]);
+	ft_putstr(g_tab[usage]);
 }
 
 int		ft_usage(int usage)
 {
 	if (usage == 0)
 	{
-		ft_putstr("Usage: ./corewar [-d N -v N | -n] <champion1.cor> <...>\n");
-		ft_putstr("#### TEXT OUTPUT MODE");
-		ft_putstr(" ###################################################\n\n");
-		ft_putstr("-v N	: Verbosity levels\n");
-		ft_putstr("\n          - 0 : Show only essentials\n\n");
+		ft_putstr("| Usage: ./corewar [-d N -v N | -n]");
+		ft_putstr(" <champion1.cor> <...> |\n");
+		ft_putstr(" ####  VERBOSE\n");
+		ft_putstr("-v N	: Verbosity levels (0 : Show only essentials)\n\n");
 		ft_putstr("####  VISUALISATEUR ");
-		ft_putstr(" ###################################################\n\n");
-		ft_putstr("-n        : Incredible visu from our mate\n\n");
+		ft_putstr("\n-visu   : Bonus viewer cant");
+		ft_putstr(" print memory with colors...\n\n");
+		ft_putstr("####  PLAYER_POSITION\n");
+		ft_putstr("-n N    : Choice the positionement of the players\n\n");
+		ft_putstr("####  DUMP\n");
+		ft_putstr("-dump N : Print the memory after N cycle\n\n");
 	}
 	else
 		ft_print_error(usage - 1);

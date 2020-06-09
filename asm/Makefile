@@ -6,7 +6,7 @@
 #    By: aboitier <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/03/04 18:42:15 by aboitier          #+#    #+#              #
-#    Updated: 2020/03/10 23:04:29 by aboitier         ###   ########.fr        #
+#    Updated: 2020/03/12 16:36:04 by aboitier         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ LIB				= ../libft/libft.a
 
 SRC				= op.c  					\
 				  init.c					\
+				  buffer_management.c		\
 				  scan.c					\
 				  main.c					\
 				
@@ -57,4 +58,15 @@ re: fclean all
 run: re 
 	@./$(NAME) tetet.s
 
-.PHONY: clean fclean re 
+mod42:
+	vim champs/42.s
+
+test: re
+	@echo "CURR_FILE  \t\t42.s"
+	@./$(NAME) champs/42.s
+
+zaz: 
+	@echo "CURR_FILE \t\t42.s"
+	@./zaz champs/42.s
+
+.PHONY: clean fclean re zaz

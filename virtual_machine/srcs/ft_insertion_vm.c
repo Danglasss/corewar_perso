@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_insertion_vm.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: paul <paul@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: danglass <danglass@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/10 13:59:05 by damboule          #+#    #+#             */
-/*   Updated: 2020/05/26 20:34:58 by paul             ###   ########.fr       */
+/*   Updated: 2020/06/09 15:09:24 by danglass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int			ft_create_player(t_player *player, t_args *filecor, int value,
 		{
 			player->index_player = value;
 			write_pos = (MEM_SIZE / filecor->player_nb) * (value - 1);
+			ft_printf("%s\n", player[i].name);
 			if (ft_read(filecor->champ[i], vm, write_pos, player))
 				return (EXIT_FAILURE);
 			return (EXIT_SUCCESS);

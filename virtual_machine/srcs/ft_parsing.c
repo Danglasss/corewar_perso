@@ -6,7 +6,7 @@
 /*   By: danglass <danglass@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/03/09 15:36:55 by damboule          #+#    #+#             */
-/*   Updated: 2020/06/09 13:36:40 by danglass         ###   ########.fr       */
+/*   Updated: 2020/06/09 15:13:56 by danglass         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,9 @@ int		ft_parse(int nb_args, char **args, t_vm *vm)
 	//if (ft_get_args(nb_args, args, &filecor, &(vm->opt)))
 	//	return (ft_free_filecor(&filecor));
 	filecor.champ[0] = ft_strdup("../champs/darksasuke.cor");
-	filecor.champ[1] = ft_strdup("../champs/42.cor");
+	filecor.champ[1] = ft_strdup("../champs/Gagnant.cor");
+	filecor.option[0] = 1;
+	filecor.option[1] = 2;
 	filecor.player_nb = 2;
 	if (ft_insertion_vm(&filecor, vm->vm, vm->player_list))
 		return (ft_free_filecor(&filecor));
